@@ -2,5 +2,12 @@ body{
     background-color: slategray;
     font-family: 'Overpass';
 }
-
+h1{
+    font-size: 1.7em;
+    color: darkblue
+}
+h2{
+    font-size: 1.2em;
+    color: gray;
+}
     
