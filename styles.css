@@ -17,3 +17,12 @@ li{
 #completed-tasks label{
     text-decoration: line-through;
 }
+button{
+    color: forestgreen;
+    background-color: aliceblue;
+    border-color: black;
+    border-style: dotted;
+}
+.add{color: green;}
+.edit{color: orange;}
+.delete{color: red;}
