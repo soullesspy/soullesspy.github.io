@@ -21,8 +21,23 @@ button{
     color: forestgreen;
     background-color: aliceblue;
     border-color: black;
-    border-style: dotted;
+    border-radius: 12px;
 }
 .add{color: green;}
+.add:hover{
+    cursor: pointer;
+    color:white;
+    background-color: green;
+}
 .edit{color: orange;}
+.edit:hover{
+    cursor: pointer;
+    color: white;
+    background-color: orange;
+}
 .delete{color: red;}
+.delete:hover{
+    cursor: pointer;
+    color: white;
+    background-color: red;
+}
