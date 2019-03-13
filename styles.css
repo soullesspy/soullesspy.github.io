@@ -22,6 +22,7 @@ button{
     background-color: aliceblue;
     border-color: black;
     border-radius: 12px;
+    border-style: groove;
 }
 .add{color: green;}
 .add:hover{
