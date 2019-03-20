@@ -34,6 +34,8 @@
         //  - Como parámetro `callbackError` envía una función que llame al método `showError` enviando un mensaje de
         //    error
         //  - La llamada debe ser asíncrona.
+        Ajax.sendGetRequest(API_URL,null,MediaFormat.JSON,loadTasks,showError, true);
+
 
     };
 
