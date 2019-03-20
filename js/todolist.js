@@ -90,7 +90,7 @@
             addTaskToList(task);
             document.getElementById('new-task').value="";
         }
-        Ajax.sendPostRequest(API_URL, param, MediaFormat.JSON, f1(task), (code) => f2(code, 'La tarea no ha podido ser añadida.'), true);
+        Ajax.sendPostRequest(API_URL, task, MediaFormat.JSON, f1(task), () => showError(code, 'La tarea no ha podido ser añadida.'), true);
 
 
         return false;
