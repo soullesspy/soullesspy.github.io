@@ -35,8 +35,6 @@
         //    error
         //  - La llamada debe ser asíncrona.
         Ajax.sendGetRequest(API_URL,null,MediaFormat.JSON,loadTasks,showError, true);
-
-
     };
 
     /**
@@ -88,6 +86,11 @@
         //    error
         //  - La llamada debe ser asíncrona.
         //  - No te olvides de envíar el parámetro `task` para que se cree la tarea.
+        function f1 (task){
+            addTaskToList(task);
+            document.getElementById('new-task').value="";
+        }
+        Ajax.sendPostRequest(API_URL, param, MediaFormat.JSON, f1(task), (code) => f2(code, 'La tarea no ha podido ser añadida.'), true);
 
 
         return false;
