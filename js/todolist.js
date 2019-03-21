@@ -207,7 +207,7 @@
         let buttonCancel = document.createElement('button');
         buttonCancel.innerText = 'Cancel';
         buttonCancel.setAttribute('id', `cancel-button-${currentTask.id}`);
-        buttonCancel.onclick = () => revertHTMLChangeOnEdit(currentTask);
+        buttonCancel.onclick = () => revertHTMLChangeOnEdit(JSON.stringify(currentTask));
 
         currentDOMTask.insertBefore(buttonCancel, currentDOMTask.children[0]);
         currentDOMTask.insertBefore(buttonOK, currentDOMTask.children[0]);
