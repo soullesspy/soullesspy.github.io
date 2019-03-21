@@ -263,5 +263,7 @@
         //   - Como parámetro `callbackError` enviar una función que llame al método `showError` enviando
         //     un mensaje de error
         //   - La llamada debe ser asíncrona.
+
+        Ajax.sendDeleteRequest(API_URL+id,null,MediaFormat.JSON,(id)=>removeTaskFromList(id),showError,true;
     };
 })();
