@@ -198,7 +198,7 @@
             //  - No te olvides de envíar el parámetro para que se cree la tarea.
             if (inputText.getAttribute('value') != currentTask.description){
                 Ajax.sendPutRequest(API_URL+currentTask.id,currentTask,MediaFormat.JSON,()=>revertHTMLChangeOnEdit(currentTask),() => showError(),true);
-            }
+            }else{revertHTMLChangeOnEdit(currentTask);}
         };
 
         let buttonCancel = document.createElement('button');
