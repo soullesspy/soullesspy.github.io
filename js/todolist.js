@@ -197,7 +197,10 @@
             //  - La llamada debe ser asíncrona.
             //  - No te olvides de envíar el parámetro para que se cree la tarea.
             if (inputText.getAttribute('value') != currentTask.description){
-                Ajax.sendPutRequest(API_URL+currentTask.id,currentTask,MediaFormat.JSON,()=>revertHTMLChangeOnEdit(currentTask),() => showError(),true);
+                function f2 (currentTask){
+                    revertHTMLChangeOnEdit(currentTask);
+                }
+                Ajax.sendPutRequest(API_URL+currentTask.id,currentTask,MediaFormat.JSON,f2 (currentTask),() => showError(),true);
             }
         };
 
