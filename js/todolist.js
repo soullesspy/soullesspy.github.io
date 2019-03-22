@@ -94,7 +94,7 @@
         //  - La llamada debe ser asíncrona.
         //  - No te olvides de envíar el parámetro `task` para que se cree la tarea.
         function f1 (task){
-            addTaskToList(JSON.parse(task))
+            addTaskToList(task);
             document.getElementById('new-task').value="";
         }
         Ajax.sendPostRequest(API_URL, task, MediaFormat.JSON, f1(task), (code) => showError(code, 'La tarea no ha podido ser añadida.'), true);
