@@ -46,6 +46,13 @@
         // TODO ITEM 6 recuperar el elemento HTML con la clase `error-bar` y modificar el HTML interno de
         // manera a mostrar el mensaje de error.
         // El mensaje de error debe desaparacer luego de 3 segundos.
+        console.log(text);
+        let errorBar = document.getElementsByClassName("error-bar")[0];
+        errorBar.innerText = text;
+        errorBar.classList.remove("hide-bar");
+        setTimeout(function () {
+            errorBar.classList.add("hide-bar");
+        }, 5000);
     };
 
 
