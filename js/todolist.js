@@ -34,7 +34,7 @@
         //  - Como parámetro `callbackError` envía una función que llame al método `showError` enviando un mensaje de
         //    error
         //  - La llamada debe ser asíncrona.
-        Ajax.sendGetRequest(API_URL,null,MediaFormat.JSON,loadTasks,showError, true);
+        Ajax.sendGetRequest(API_URL,null,MediaFormat.JSON,(value) => loadTasks(value),(code) => showError(code, 'La tarea no ha podido ser añadida.'), true);
     };
 
     /**
@@ -118,6 +118,7 @@
             // - Una forma de hacerlo es remover directamente el archivo con el id `task-${task.id}` del DOM HTML
             // y luego llamar a la función `addTaskToList` que re-creara la tarea con el nuevo estado en el lugar correcto.
             // - No te olvides de llamar al API (método PUT) para modificar el estado de la tarea en el servidor.
+            
         };
     };
 
@@ -249,6 +250,7 @@
      */
     const removeTaskFromList = (id) => {
         // TODO ITEM 4: remover del DOM HTML el elemento con id `task-${id}`
+
     };
 
     /**
@@ -263,7 +265,6 @@
         //   - Como parámetro `callbackError` enviar una función que llame al método `showError` enviando
         //     un mensaje de error
         //   - La llamada debe ser asíncrona.
-
         Ajax.sendDeleteRequest(API_URL+id,null,MediaFormat.JSON,(id)=>removeTaskFromList(id),showError);
     };
 })();
