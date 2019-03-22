@@ -255,6 +255,7 @@
      */
     const removeTaskFromList = (id) => {
         // TODO ITEM 4: remover del DOM HTML el elemento con id `task-${id}`
+        document.getElementById(`task-${id}`).remove();
 
     };
 
