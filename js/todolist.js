@@ -200,7 +200,6 @@
             //  - La llamada debe ser asíncrona.
             //  - No te olvides de envíar el parámetro para que se cree la tarea.
             Ajax.sendPutRequest(API_URL + "/" + currentTask.id,currentTask,MediaFormat.JSON,(value) => revertHTMLChangeOnEdit(value),(code, value) => showError(code, 'La tarea no ha podido ser actualizada.'),true);
-            }
         };
 
         let buttonCancel = document.createElement('button');
