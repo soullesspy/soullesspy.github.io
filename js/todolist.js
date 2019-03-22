@@ -120,7 +120,15 @@
             // - Una forma de hacerlo es remover directamente el archivo con el id `task-${task.id}` del DOM HTML
             // y luego llamar a la función `addTaskToList` que re-creara la tarea con el nuevo estado en el lugar correcto.
             // - No te olvides de llamar al API (método PUT) para modificar el estado de la tarea en el servidor.
-            
+            if (e.target.checked) {
+                task.status = TASK_STATUS.DONE;
+            } else {
+                task.status = TASK_STATUS.PENDING;
+            }
+            document.getElementById(`task-${task.id}`).remove();
+            Ajax.sendPutRequest(API_URL + "/" + task.id, task, MediaFormat.JSON,
+                (value) => addTaskToList(JSON.parse(value)),
+                (code, value) => showError(code, 'La tarea no ha podido ser actualizada.'),true);
         };
     };
 
