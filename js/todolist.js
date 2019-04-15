@@ -5,7 +5,7 @@
  * @since 04/03/19.
  * @version 1.0
  */
-(() => {
+(($) => {
     'use strict';
 
     const API_URL = 'https://task-backend-fpuna.herokuapp.com/tasks';
@@ -28,7 +28,13 @@
      * list of tasks
      */
     document.onreadystatechange = () => {
-        Ajax.sendGetRequest(API_URL,null,MediaFormat.JSON,(value) => loadTasks(value),(code) => showError(code, 'La tarea no ha podido ser añadida.'), true);
+        $.get(API_URL, function() {
+            loadTasks(value),(code);
+          })
+            .fail(function() {
+                showError(code, 'La tarea no ha podido ser añadida.');
+            });
+        /**Ajax.sendGetRequest(API_URL,null,MediaFormat.JSON,(value) =>  => showError(code, 'La tarea no ha podido ser añadida.'), true);*/
     };
 
     /**
@@ -237,4 +243,4 @@
         Ajax.sendDeleteRequest(API_URL + '/' + id,null,MediaFormat.JSON,(value) => removeTaskFromList(id),
         (code) => showError(code, 'La tarea no ha podido ser eliminada.'),true);
     };
-})();
+})(jQuery);
