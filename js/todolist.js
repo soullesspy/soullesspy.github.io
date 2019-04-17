@@ -195,14 +195,21 @@
         /**
          * We associate the event click on the button ok, to send a PUT request to the server.
          */
-        let buttonOK = document.createElement('button');
-        buttonOK.innerText = 'OK';
-        buttonOK.setAttribute('id', `ok-button-${currentTask.id}`);
-        buttonOK.onclick = () => {
-            currentTask.description = document.getElementById(`task-edit-${currentTask.id}`).value;
+        let buttonOK = $('<button id="ok-button-' + id + '">OK</button>');
+        buttonOK.click((e) => {
+            currentTask.description = $('#task-edit-' + id).val();
+            $.ajax({
+                method: "PUT",
+                url: API_URL + "/" + currentTask.id,
+                data: JSON.stringify(currentTask),
+                contentType: 'application/json'
+            }).done((value) => {
+                revertHTMLChangeOnEdit(value);
+            }).fail((code) => {
+                showError(code, 'La tarea no ha podido ser actualizada.');
+            });
 
-            Ajax.sendPutRequest(API_URL + "/" + currentTask.id,currentTask,MediaFormat.JSON,(value) => revertHTMLChangeOnEdit(value),(code, value) => showError(code, 'La tarea no ha podido ser actualizada.'),true);
-        };
+        });
 
         let buttonCancel = document.createElement('button');
         buttonCancel.innerText = 'Cancel';
