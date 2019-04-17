@@ -138,6 +138,7 @@
      */
     const addTaskToList = (task) => {
         let newItem = $('<li id="task-' + task.id + '"></li>');
+
         let label = $('<label></label>');
         if (task.status !== TASK_STATUS.CANCEL) {
             let checked = "";
@@ -153,17 +154,14 @@
         editButton.click((e) => {
             editTask(e);
         });
-
         let textDeleteButton = "<button class='delete' data-id='" + task.id + "'>Borrar</button>";
         let deleteButton = $(textDeleteButton);
         deleteButton.click((e) => {
             removeTask(e);
         });
-
         newItem.append(label);
         newItem.append(editButton);
         newItem.append(deleteButton);
-
         if (task.status === TASK_STATUS.PENDING) {
             let textCancelButton = "<button class='cancel' data-id='" + task.id + "'>Cancelar</button>";
             let cancelButton = $(textCancelButton);
@@ -172,7 +170,6 @@
             });
             newItem.append(cancelButton);
         }
-
         if (task.status === TASK_STATUS.PENDING)
             $('#incomplete-tasks').append(newItem);
         else if (task.status === TASK_STATUS.DONE)
