@@ -57,9 +57,7 @@
      *
      * @param array the string coming on the body of the API response
      */
-    const loadTasks = (array) => {
-
-        let tasks = JSON.parse(array);
+    const loadTasks = (tasks) => {
         for (let i in tasks) {
             if (tasks.hasOwnProperty(i)) {
                 addTaskToList(tasks[i]);
