@@ -33,7 +33,6 @@
         }).fail((code) => {
             showError(code, 'La tarea no ha podido ser añadida.');
         });
-        // Ajax.sendGetRequest(API_URL, null, MediaFormat.JSON, (value) => loadTasks(value), (code) => showError(code, 'La tarea no ha podido ser añadida.'), true);
     });
 
     /**
@@ -43,12 +42,13 @@
      */
     const showError = (code, text) => {
         console.log(text);
-        let errorBar = document.getElementsByClassName("error-bar")[0];
-        errorBar.innerText = text;
-        errorBar.classList.remove("hide-bar");
+        let errorBar = $(".error-bar");
+        errorBar.text = text;
+        errorBar.removeClass("hide-bar");
         setTimeout(function () {
-            errorBar.classList.add("hide-bar");
+            errorBar.addClass('hide-bar');
         }, 5000);
+
     };
 
 
@@ -74,14 +74,14 @@
      * @return {boolean}
      */
     const addTask = (e) => {
-        let newTaskInput = document.getElementById("new-task");
-        let content = newTaskInput.value;
+        let newTaskInput = $("#new-task");
+        // let newTaskInput = document.getElementById("new-task");
+        let content = newTaskInput.val();
         if (content.length === 0) return false;
 
         e.preventDefault();
 
         let task = new Task(content);
-
         $.ajax({
             method: "POST",
             url: API_URL,
@@ -94,16 +94,17 @@
             showError(code, 'La tarea no ha podido ser añadida.');
         });
 
-        document.getElementById('new-task').value="";
+        newTaskInput.val("");
         return false;
     };
 
     /**
      * This procedure links the new task button the addTask method on the click event.
      */
-    let addButtons = document.getElementsByClassName('add');
-    for (let i in addButtons)
-        addButtons.item(Number(i)).onclick =  (e) => addTask(e);
+    let addButtons = $('.add');
+    addButtons.click((e) => {
+        addTask(e);
+    });
 
     /**
      * We associate a function to manipulate the DOM once the checkbox value is changed.
