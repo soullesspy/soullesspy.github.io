@@ -248,7 +248,7 @@
      * @param id the identifier from the task
      */
     const removeTaskFromList = (id) => {
-        document.getElementById(`task-${id}`).remove();
+        $('#task-' + id).remove();
     };
 
     /**
@@ -257,8 +257,13 @@
      */
     const removeTask = (e) => {
         const id = e.target.dataset.id;
-
-        Ajax.sendDeleteRequest(API_URL + '/' + id,null,MediaFormat.JSON,(value) => removeTaskFromList(id),
-        (code) => showError(code, 'La tarea no ha podido ser eliminada.'),true);
+        $.ajax({
+            method: "DELETE",
+            url: API_URL + '/' + id
+        }).done((value) => {
+            removeTaskFromList(id);
+        }).fail((code) => {
+            showError(code, 'La tarea no ha podido ser añadida.');
+        });
     };
 })(jQuery);
