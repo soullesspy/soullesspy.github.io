@@ -27,15 +27,14 @@
      * This method is executed once the page have just been loaded and call the service to retrieve the
      * list of tasks
      */
-    document.onreadystatechange = () => {
-        $.get(API_URL, function() {
-            loadTasks(value),(code);
-          })
-            .fail(function() {
-                showError(code, 'La tarea no ha podido ser añadida.');
-            });
-        /**Ajax.sendGetRequest(API_URL,null,MediaFormat.JSON,(value) =>  => showError(code, 'La tarea no ha podido ser añadida.'), true);*/
-    };
+    $(document).on('readystatechange', () => {
+        $.get(API_URL).done(function (data) {
+            loadTasks(data);
+        }).fail((code) => {
+            showError(code, 'La tarea no ha podido ser añadida.');
+        });
+        // Ajax.sendGetRequest(API_URL, null, MediaFormat.JSON, (value) => loadTasks(value), (code) => showError(code, 'La tarea no ha podido ser añadida.'), true);
+    });
 
     /**
      * This method displays an error on the page.
@@ -83,8 +82,18 @@
 
         let task = new Task(content);
 
-        Ajax.sendPostRequest(API_URL, task, MediaFormat.JSON, (value) => addTaskToList(JSON.parse(value)), 
-        (code) => showError(code, 'La tarea no ha podido ser añadida.'), true);
+        $.ajax({
+            method: "POST",
+            url: API_URL,
+            data: JSON.stringify(task),
+            contentType: 'application/json'
+        }).done((value) => {
+            addTaskToList(value);
+        }).fail((code) => {
+            console.log(code);
+            showError(code, 'La tarea no ha podido ser añadida.');
+        });
+
         document.getElementById('new-task').value="";
         return false;
     };
@@ -101,19 +110,28 @@
      * Change the task to the completed or incomplete list (according to the status)
      */
     const addOnChangeEvent = (task) => {
-        const checkBox = document.getElementById(`task-${task.id}`).querySelector('label > input');
-        checkBox.onchange = (e) => {
+        const checkBox = $('#task-' + task.id).find('label').find('input');
 
-            if (e.target.checked) {
+        checkBox.click(function () {
+            console.log($(this).prop("checked"));
+            if ($(this).prop("checked")) {
                 task.status = TASK_STATUS.DONE;
-            } else {
+            }else{
                 task.status = TASK_STATUS.PENDING;
             }
-            document.getElementById(`task-${task.id}`).remove();
-            Ajax.sendPutRequest(API_URL + "/" + task.id, task, MediaFormat.JSON,
-                (value) => addTaskToList(JSON.parse(value)),
-                (code, value) => showError(code, 'La tarea no ha podido ser actualizada.'),true);
-        };
+            $('#task-' + task.id).remove();
+            $.ajax({
+                method: "PUT",
+                url: API_URL + "/" + task.id,
+                data: JSON.stringify(task),
+                contentType: 'application/json'
+            }).done((value) => {
+                addTaskToList(value);
+
+            }).fail((code) => {
+                showError(code, 'La tarea no ha podido ser actualizada.');
+            });
+        });
     };
 
     /**
