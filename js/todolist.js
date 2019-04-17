@@ -139,34 +139,52 @@
      * @param task the new task.
      */
     const addTaskToList = (task) => {
-        let newItem = document.createElement('li');
-        newItem.setAttribute('id', `task-${task.id}`);
+        let newItem = $('<li id="task-' + task.id + '"></li>');
 
-        let label = document.createElement('label');
-        label.innerHTML = `<input type="checkbox" ${task.status === TASK_STATUS.DONE ? "checked" : ""}/> ${task.description}`;
+        let label = $('<label></label>');
+        if (task.status !== TASK_STATUS.CANCEL) {
+            let checked = "";
+            if (task.status === TASK_STATUS.DONE){
+                checked = "checked";
+            }
+            label.html('<input type="checkbox" ' + checked+' />'+ task.description);
+        } else {
+            label.html(task.description);
+        }
+        let textEditButton = "<button class='edit' data-id='" + task.id + "'>Editar</button>";
+        let editButton = $(textEditButton);
+        editButton.click((e) => {
+            editTask(e);
+        });
 
-        let editButton = document.createElement('button');
-        editButton.innerText = 'Editar';
-        editButton.classList.add('edit');
-        editButton.setAttribute('data-id', task.id);
-        editButton.onclick = (e) => editTask(e);
+        let textDeleteButton = "<button class='delete' data-id='" + task.id + "'>Borrar</button>";
+        let deleteButton = $(textDeleteButton);
+        deleteButton.click((e) => {
+            removeTask(e);
+        });
 
-        let deleteButton = document.createElement('button');
-        deleteButton.innerText = 'Borrar';
-        deleteButton.classList.add('delete');
-        deleteButton.setAttribute('data-id', task.id);
-        deleteButton.onclick = (e) => removeTask(e);
+        newItem.append(label);
+        newItem.append(editButton);
+        newItem.append(deleteButton);
 
-        newItem.appendChild(label);
-        newItem.appendChild(editButton);
-        newItem.appendChild(deleteButton);
+        if (task.status === TASK_STATUS.PENDING) {
+            let textCancelButton = "<button class='cancel' data-id='" + task.id + "'>Cancelar</button>";
+            let cancelButton = $(textCancelButton);
+            cancelButton.click((e) => {
+                cancelTask(e);
+            });
+            newItem.append(cancelButton);
+        }
 
-        if (task.status  === TASK_STATUS.PENDING)
-            document.getElementById('incomplete-tasks').appendChild(newItem);
+        if (task.status === TASK_STATUS.PENDING)
+            $('#incomplete-tasks').append(newItem);
+        else if (task.status === TASK_STATUS.DONE)
+            $('#completed-tasks').append(newItem);
         else
-            document.getElementById('completed-tasks').appendChild(newItem);
-
-        addOnChangeEvent(task);
+            $('#canceled-tasks').append(newItem);
+        if (task.status !== TASK_STATUS.CANCEL) {
+            addOnChangeEvent(task);
+        }
     };
 
     /**
@@ -179,15 +197,15 @@
         // We retrieve the value of the attribute data-id;
         const id = e.target.dataset.id;
 
-        let currentDOMTask = document.getElementById(`task-${id}`);
-        currentDOMTask.querySelector("label > input[type=checkbox]").remove();
+        let currentDOMTask = $('#task-' + id);
+        currentDOMTask.find("input[type=checkbox]").remove();;
 
-        let currentTask = new Task(currentDOMTask.querySelector("label").innerHTML.trim());
+        let currentTask = new Task(currentDOMTask.find("label").text().trim());
         currentTask.id = id;
 
         currentDOMTask.querySelector('label').remove();
 
-        let inputText = document.createElement('input');
+        let inputText = $("<input id='task-edit-" + id + "' type='text' value='" + currentTask.description + "' />");
         inputText.setAttribute('id', `task-edit-${currentTask.id}`);
         inputText.setAttribute('type', 'text');
         inputText.setAttribute('value', currentTask.description);
