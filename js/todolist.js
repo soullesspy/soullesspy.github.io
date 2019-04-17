@@ -193,19 +193,12 @@
     const editTask = (e) => {
         // We retrieve the value of the attribute data-id;
         const id = e.target.dataset.id;
-
         let currentDOMTask = $('#task-' + id);
-        currentDOMTask.find("input[type=checkbox]").remove();;
-
+        currentDOMTask.find("input[type=checkbox]").remove();
         let currentTask = new Task(currentDOMTask.find("label").text().trim());
         currentTask.id = id;
-
-        currentDOMTask.querySelector('label').remove();
-
+        currentDOMTask.find('label').remove();
         let inputText = $("<input id='task-edit-" + id + "' type='text' value='" + currentTask.description + "' />");
-        inputText.setAttribute('id', `task-edit-${currentTask.id}`);
-        inputText.setAttribute('type', 'text');
-        inputText.setAttribute('value', currentTask.description);
 
         /**
          * We associate the event click on the button ok, to send a PUT request to the server.
