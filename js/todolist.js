@@ -75,7 +75,6 @@
      */
     const addTask = (e) => {
         let newTaskInput = $("#new-task");
-        // let newTaskInput = document.getElementById("new-task");
         let content = newTaskInput.val();
         if (content.length === 0) return false;
 
@@ -141,7 +140,6 @@
      */
     const addTaskToList = (task) => {
         let newItem = $('<li id="task-' + task.id + '"></li>');
-
         let label = $('<label></label>');
         if (task.status !== TASK_STATUS.CANCEL) {
             let checked = "";
@@ -230,17 +228,16 @@
 
         });
 
-        let buttonCancel = document.createElement('button');
-        buttonCancel.innerText = 'Cancel';
-        buttonCancel.setAttribute('id', `cancel-button-${currentTask.id}`);
-        buttonCancel.onclick = () => revertHTMLChangeOnEdit(JSON.stringify(currentTask));
-
-        currentDOMTask.insertBefore(buttonCancel, currentDOMTask.children[0]);
-        currentDOMTask.insertBefore(buttonOK, currentDOMTask.children[0]);
-        currentDOMTask.insertBefore(inputText, currentDOMTask.children[0]);
-
-        currentDOMTask.querySelector('.edit').style.visibility = 'hidden';
-        currentDOMTask.querySelector('.delete').style.visibility = 'hidden';
+        let buttonCancel = $('<button id="cancel-button-' + id + '">Cancel</button>');
+        buttonCancel.click(function () {
+            revertHTMLChangeOnEdit(currentTask)
+        });
+        currentDOMTask.prepend(buttonCancel);
+        currentDOMTask.prepend(buttonOK);
+        currentDOMTask.prepend(inputText);
+        currentDOMTask.find('.edit').css("visibility", 'hidden');
+        currentDOMTask.find('.delete').css("visibility", 'hidden');
+        currentDOMTask.find('.cancel').css("visibility", 'hidden');
 
         inputText.focus();
     };
@@ -250,23 +247,20 @@
      * @param currentTask the string coming from the API
      */
     const revertHTMLChangeOnEdit = (currentTask) => {
-        let task = JSON.parse(currentTask);
+        let task = currentTask;
+        let currentDOMTask = $('#task-' + task.id);
+        $('#task-' + task.id).find('input[type=text]').remove();
+        currentDOMTask.find('input[type=text]').remove();
 
-        let currentDOMTask = document.getElementById(`task-${task.id}`);
-        currentDOMTask.querySelector('input[type=text]').remove();
-
-        let label = document.createElement('label');
-
-        currentDOMTask.insertBefore(label, currentDOMTask.children[0]);
-        label.innerHTML = `<input type="checkbox"/> ${task.description}`;
-        addOnChangeEvent(task);
-
-        currentDOMTask.insertBefore(label, currentDOMTask.children[0]);
-        currentDOMTask.querySelector(`button#ok-button-${task.id}`).remove();
-        currentDOMTask.querySelector(`button#cancel-button-${task.id}`).remove();
-
-        currentDOMTask.querySelector('.edit').style.visibility = 'visible';
-        currentDOMTask.querySelector('.delete').style.visibility = 'visible';
+        let label = $("<label></label>");
+        currentDOMTask.prepend(label);
+        label.html("<input type='checkbox'/>" + task.description);
+        currentDOMTask.prepend(label);
+        currentDOMTask.find('button#ok-button-'+task.id).remove();
+        currentDOMTask.find('button#cancel-button-'+task.id).remove();
+        currentDOMTask.find('.edit').css('visibility', 'visible');
+        currentDOMTask.find('.delete').css('visibility', 'visible');
+        currentDOMTask.find('.cancel').css('visibility', 'visible');
     };
 
     /**
@@ -292,4 +286,27 @@
             showError(code, 'La tarea no ha podido ser añadida.');
         });
     };
-})(jQuery);
+    /**
+    * This method sends a PUT request to update the task from the server.
+    * @param e
+    */
+   const cancelTask = (e) => {
+       const id = e.target.dataset.id;
+       const checkBox = document.getElementById(`task-${id}`).querySelector('label > input');
+       if (!checkBox.checked) {
+
+           $.ajax({
+               method: "PUT",
+               url: API_URL + "/" + id,
+               data: JSON.stringify({"status": TASK_STATUS.CANCEL}),
+               contentType: 'application/json'
+           }).done((value) => {
+               $('#task-' + id).remove();
+               addTaskToList(value);
+           }).fail((code) => {
+               showError(code, 'La tarea no ha podido ser añadida.');
+           });
+       }
+   };
+})
+(jQuery);
